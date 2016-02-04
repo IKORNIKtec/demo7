@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,17 +29,26 @@ public abstract class BasePage {
     public void waitPageLoadingCompleted(){
         waitPageLoadingCompleted(WAIT_TIME_SECONDS);
     }
-    public void waitPageLoadingCompleted(final long timeout){
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
 
-        ExpectedCondition<Boolean> pageLoadCondition = new
-                ExpectedCondition<Boolean>() {
-                    public Boolean apply(WebDriver driver) {
-                        return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
-                    }
-                };
+    public void waitPageLoadingCompleted(final long timeoutSeconds){
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
 
-        wait.until(pageLoadCondition);
+            ExpectedCondition<Boolean> pageLoadCondition = new
+                    ExpectedCondition<Boolean>() {
+                        public Boolean apply(WebDriver driver) {
+                            return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+                        }
+                    };
+
+            wait.until(pageLoadCondition);
+        }catch (TimeoutException e){
+
+        }
+    }
+
+    public boolean isPageLoaded(){
+        return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
     }
 }
 
