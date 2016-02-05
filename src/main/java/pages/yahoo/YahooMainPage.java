@@ -16,11 +16,14 @@ public class YahooMainPage extends BasePage {
     private final String MENU_ITEM_LOCATOR = "//*[@id='Navigation']//span[contains(.,'%s')]";
     private final String SEE_MORE_MENU_ITEM_LOCATOR = "//*[contains(@class,'js-navlinks-seemore-menu')]//span[contains(.,'%s')]";
 
-    @FindBy(css = ".navlist li[style=''] span")
-    List<WebElement> sitesUrls;
+    @FindBy(xpath = "//*[@id='Navigation']//span")
+    List<WebElement> menuItems;
+
+//    @FindBy(css = ".navlist li[style=''] span")
+//    List<WebElement> menuItems;
 
     @FindBy(css = ".js-navlinks-seemore-menu span")
-    List<WebElement> seeMoreMenu;
+    List<WebElement> seeMoreMenuItems;
 
 
     @FindBy(css = "[aria-label='More Navlinks']")
@@ -31,10 +34,10 @@ public class YahooMainPage extends BasePage {
     }
 
     public List<WebElement> getSiteLinks(){
-        return sitesUrls;
+        return menuItems;
     }
     public List<WebElement> getMoreSiteLinks(){
-        return seeMoreMenu;
+        return seeMoreMenuItems;
     }
 
     public void open(String url){
@@ -62,6 +65,12 @@ public class YahooMainPage extends BasePage {
             getNavigationMenuItem(menuName).click();
         }
         logger.info("Menu item '{}' was been clicked", menuName);
+    }
+
+    public List<WebElement> getAllMenuItems(){
+        List<WebElement> allItems =menuItems;
+        allItems.addAll(seeMoreMenuItems);
+        return allItems;
     }
 
 }
